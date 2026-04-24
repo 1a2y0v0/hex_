@@ -8,7 +8,6 @@
     <!-- 引入独立数据文件 -->
     <script src="data.js"></script>
     <style>
-        /* ... 样式保持不变，此处省略，与之前完全相同 ... */
         :root {
             --bg-deep: #0a0c14;
             --bg-panel: #111827;
@@ -163,6 +162,12 @@
             color: var(--text-secondary);
             letter-spacing: 0.03em;
             font-family: var(--font-mono);
+        }
+        .update-time {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            letter-spacing: 0.02em;
         }
 
         .card {
@@ -472,7 +477,7 @@
         <!-- 玩家积分排行榜表格 -->
         <div class="card">
             <div class="card-title">
-                <span class="icon-dot gold"></span> 玩家积分排行榜 · 全部成员（17人）
+                <span class="icon-dot gold"></span> 玩家积分排行榜 · 全部成员
             </div>
             <div class="table-wrapper">
                 <table id="rankingTable">
@@ -498,7 +503,7 @@
         <!-- 总积分柱状图 -->
         <div class="card chart-full">
             <div class="card-title">
-                <span class="icon-dot purple"></span> 总积分柱状图（全部17名玩家）
+                <span class="icon-dot purple"></span> 总积分柱状图（全部玩家）
             </div>
             <div class="chart-container tall">
                 <canvas id="chartTotalScore"></canvas>
@@ -606,6 +611,14 @@
                 particle.style.animationDuration = (Math.random() * 18 + 10) + 's';
                 particle.style.animationDelay = (Math.random() * 16) + 's';
                 particlesContainer.appendChild(particle);
+            }
+
+            // 显示更新时间（来自 data.js 中的 lastUpdateTime 变量）
+            const timeElement = document.getElementById('updateTimeDisplay');
+            if (typeof lastUpdateTime !== 'undefined') {
+                timeElement.textContent = '📅 更新时间：' + lastUpdateTime;
+            } else {
+                timeElement.textContent = '📅 更新时间：未知';
             }
 
             // 数据已由 data.js 提供，可直接使用 detailData
