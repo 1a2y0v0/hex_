@@ -1,6 +1,6 @@
 // 海克斯积分数据 - 每次更新只需修改此数组
 const detailData = [
-    { name: '胆小菇(丁真)', winBonus: 25, loseBonus: 13, fire: 51, shield: 10, assist: 10, extra: 22, penalty: 0, total: 93 },
+    { name: '胆小菇(丁真)', winBonus: 23, loseBonus: 13, fire: 51, shield: 10, assist: 10, extra: 22, penalty: 0, total: 93 },
     { name: '小姐(朱赛)', winBonus: 14, loseBonus: 14, fire: 17, shield: 18, assist: 21, extra: 23, penalty: -3, total: 76 },
     { name: '香农(张中伟)', winBonus: 14, loseBonus: 15, fire: 11, shield: 14, assist: 27, extra: 21, penalty: 0, total: 73 },
     { name: '品如(兰海)', winBonus: 14, loseBonus: 14, fire: 18, shield: 16, assist: 16, extra: 18, penalty: -4, total: 64 },
