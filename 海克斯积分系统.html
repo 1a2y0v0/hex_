@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海克斯大乱斗 · 积分统计系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js">
+    </script>
+    <style>
+        :root {
+            --bg-deep: #0a0c14;
+            --bg-panel: #111827;
+            --bg-card: #161b28;
+            --border-hex: #1e2d4a;
+            --gold: #c8a951;
+            --gold-bright: #f0d478;
+            --blue-hex: #3b7ddd;
+            --blue-glow: #5b9cf5;
+            --purple: #7c5ce7;
+            --purple-glow: #9b7ef5;
+            --teal: #2dd4bf;
+            --text-primary: #e2e8f0;
+            --text-secondary: #a0b4cc;
+            --text-muted: #6b7d95;
+            --red-soft: #f87171;
+            --orange-soft: #fb923c;
+            --accent-gradient: linear-gradient(135deg, #c8a951 0%, #f0d478 30%, #c8a951 60%, #8b6914 100%);
+            --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(59, 125, 221, 0.08);
+            --glow-blue: 0 0 20px rgba(59, 125, 221, 0.25);
+            --glow-gold: 0 0 20px rgba(200, 169, 81, 0.3);
+            --glow-purple: 0 0 20px rgba(124, 92, 231, 0.25);
+            --font-tech: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+            --font-mono: 'SF Mono', 'Cascadia Code', 'Consolas', 'Monaco', 'PingFang SC', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-deep);
+            background-image:
+                radial-gradient(ellipse at 20% 10%, rgba(59, 125, 221, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 75% 25%, rgba(124, 92, 231, 0.05) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 60%, rgba(200, 169, 81, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 80%, rgba(59, 125, 221, 0.04) 0%, transparent 50%);
+            font-family: var(--font-tech);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px 16px 60px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+            opacity: 0;
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) scale(0);
+                opacity: 0;
+            }
+            5% {
+                opacity: 0.7;
+            }
+            60% {
+                opacity: 0.5;
+            }
+            95% {
+                opacity: 0.05;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.4);
+                opacity: 0;
+            }
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 32px 24px 28px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-hex);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--card-shadow), var(--glow-blue);
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            border-radius: 3px 3px 0 0;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 80px;
+            background: radial-gradient(ellipse, rgba(200, 169, 81, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .header-icon {
+            font-size: 48px;
+            display: inline-block;
+            animation: pulseGlow 2.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 18px rgba(200, 169, 81, 0.5));
+        }
+        @keyframes pulseGlow {
+            0%,
+            100% {
+                filter: drop-shadow(0 0 18px rgba(200, 169, 81, 0.5));
+            }
+            50% {
+                filter: drop-shadow(0 0 32px rgba(240, 212, 120, 0.85));
+            }
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 8px 0 6px;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.03em;
+            font-family: var(--font-mono);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-hex);
+            border-radius: 14px;
+            padding: 24px 22px;
+            box-shadow: var(--card-shadow);
+            transition: box-shadow 0.4s ease;
+        }
+        .card:hover {
+            box-shadow: var(--card-shadow), var(--glow-blue);
+        }
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+        }
+        .card-title .icon-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .icon-dot.gold {
+            background: var(--gold);
+            box-shadow: 0 0 10px var(--gold);
+        }
+        .icon-dot.blue {
+            background: var(--blue-hex);
+            box-shadow: 0 0 10px var(--blue-glow);
+        }
+        .icon-dot.purple {
+            background: var(--purple);
+            box-shadow: 0 0 10px var(--purple-glow);
+        }
+        .icon-dot.teal {
+            background: var(--teal);
+            box-shadow: 0 0 10px var(--teal);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 10px;
+        }
+        .table-wrapper::-webkit-scrollbar {
+            height: 6px;
+            background: transparent;
+        }
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 900px;
+            white-space: nowrap;
+        }
+        table thead th {
+            background: rgba(30, 45, 74, 0.7);
+            color: var(--gold-bright);
+            font-weight: 700;
+            padding: 13px 10px;
+            text-align: center;
+            letter-spacing: 0.03em;
+            font-size: 0.8rem;
+            border-bottom: 2px solid rgba(200, 169, 81, 0.35);
+            position: sticky;
+            top: 0;
+        }
+        table tbody td {
+            padding: 11px 10px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+            transition: background 0.2s;
+        }
+        table tbody tr {
+            transition: all 0.25s;
+        }
+        table tbody tr:hover {
+            background: rgba(59, 125, 221, 0.07);
+        }
+        table tbody tr.top-row {
+            background: rgba(200, 169, 81, 0.06);
+        }
+        table tbody tr.top-row td:first-child {
+            color: var(--gold-bright);
+            font-weight: 700;
+        }
+        .rank-badge {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 50%;
+            font-weight: 800;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        .rank-1 {
+            background: linear-gradient(135deg, #f0d478, #c8a951);
+            color: #1a1a1a;
+            box-shadow: 0 0 14px rgba(200, 169, 81, 0.6);
+        }
+        .rank-2 {
+            background: linear-gradient(135deg, #d4d4d4, #a0a0a0);
+            color: #1a1a1a;
+            box-shadow: 0 0 10px rgba(180, 180, 180, 0.5);
+        }
+        .rank-3 {
+            background: linear-gradient(135deg, #e8a87c, #c07840);
+            color: #1a1a1a;
+            box-shadow: 0 0 10px rgba(200, 140, 90, 0.5);
+        }
+        .rank-other {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-secondary);
+        }
+        .stat-highlight {
+            color: var(--gold-bright);
+            font-weight: 600;
+        }
+        .tag-penalty {
+            display: inline-block;
+            background: rgba(248, 113, 113, 0.15);
+            color: var(--red-soft);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .rules-card {
+            border: 1px solid rgba(200, 169, 81, 0.35);
+            background: linear-gradient(180deg, #1a2238 0%, #111827 100%);
+            box-shadow: var(--card-shadow), var(--glow-gold);
+        }
+        .rules-card .card-title {
+            color: var(--gold-bright);
+        }
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 8px;
+        }
+        .rule-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 16px 18px;
+        }
+        .rule-section h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .rule-section h4.gold-text {
+            color: var(--gold-bright);
+        }
+        .rule-section h4.green-text {
+            color: var(--teal);
+        }
+        .rule-section h4.red-text {
+            color: var(--red-soft);
+        }
+        .rule-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .rule-section ul li {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            padding: 4px 0 4px 16px;
+            position: relative;
+            line-height: 1.5;
+        }
+        .rule-section ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            top: 4px;
+        }
+        .rule-section .highlight-inline {
+            color: var(--gold-bright);
+            font-weight: 600;
+        }
+        .rule-section .penalty-inline {
+            color: var(--red-soft);
+            font-weight: 600;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .chart-full {
+            grid-column: 1 / -1;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            min-height: 380px;
+        }
+        .chart-container.radar-container {
+            min-height: 460px;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        .chart-container.tall {
+            min-height: 500px;
+        }
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .radar-note {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            margin-top: 8px;
+            background: rgba(255,255,255,0.02);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .radar-note span {
+            color: var(--gold-bright);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px 6px 40px;
+            }
+            .header {
+                padding: 20px 14px 18px;
+            }
+            .header h1 {
+                font-size: 1.4rem;
+            }
+            .card {
+                padding: 16px 10px;
+            }
+            table {
+                font-size: 0.72rem;
+                min-width: 700px;
+            }
+            table thead th,
+            table tbody td {
+                padding: 8px 5px;
+            }
+            .chart-container {
+                min-height: 280px;
+            }
+            .chart-container.radar-container {
+                min-height: 350px;
+                max-width: 100%;
+            }
+            .chart-container.tall {
+                min-height: 380px;
+            }
+            .rules-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="particles-container" id="particlesContainer"></div>
+
+    <div class="main-container">
+
+        <!-- 头部 -->
+        <div class="header">
+            <div class="header-icon">⚙️🔮</div>
+            <h1>海克斯大乱斗积分统计系统</h1>
+            <p class="subtitle">HEXTECH ARAM · POINTS TRACKER</p>
+        </div>
+
+        <!-- 玩家积分排行榜表格 -->
+        <div class="card">
+            <div class="card-title">
+                <span class="icon-dot gold"></span> 玩家积分排行榜 · 全部成员（17人）
+            </div>
+            <div class="table-wrapper">
+                <table id="rankingTable">
+                    <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>选手</th>
+                            <th>胜局加分</th>
+                            <th>败局加分</th>
+                            <th>🔥打火得分</th>
+                            <th>🛡打盾得分</th>
+                            <th>🤝助攻得分</th>
+                            <th>⭐额外奖励</th>
+                            <th>⚠扣分</th>
+                            <th>📊总积分</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankingTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 总积分柱状图 -->
+        <div class="card chart-full">
+            <div class="card-title">
+                <span class="icon-dot purple"></span> 总积分柱状图（全部17名玩家）
+            </div>
+            <div class="chart-container tall">
+                <canvas id="chartTotalScore"></canvas>
+            </div>
+        </div>
+
+        <!-- 打火/打盾/助攻 与 胜局/败局 分组图 -->
+        <div class="charts-grid">
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon-dot blue"></span> 打火·打盾·助攻得分对比（TOP10）
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartGrouped"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon-dot teal"></span> 胜局加分次数 vs 败局加分次数（TOP10）
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartWinLose"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 额外奖励/扣分 与 雷达图 行 -->
+        <div class="charts-grid">
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon-dot gold"></span> 额外奖励 & 扣分对比（TOP10）
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartExtraPenalty"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon-dot purple"></span> 综合能力雷达图（TOP7玩家）
+                </div>
+                <div class="chart-container radar-container">
+                    <canvas id="chartRadar"></canvas>
+                </div>
+                <div class="radar-note">
+                    💡 提示：雷达图显示的是<span>标准化分数（0-100）</span>，非原始数值。鼠标悬停可查看<span>原始数据</span>。
+                    各维度最大值：胜局<span>23</span> · 败局<span>18</span> · 打火<span>51</span> · 打盾<span>29</span> · 助攻<span>27</span> · 额外<span>23</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 计分规则说明 -->
+        <div class="card rules-card chart-full">
+            <div class="card-title">
+                <span class="icon-dot gold"></span> 📋 计分规则说明
+            </div>
+            <div class="rules-grid">
+                <div class="rule-section">
+                    <h4 class="gold-text">🏆 核心加分规则</h4>
+                    <ul>
+                        <li><span class="highlight-inline">最高伤害（打火）</span>：获胜方 <span class="highlight-inline">+2</span>，失败 <span class="highlight-inline">+1</span>（两方分别计算，数值一样并列加分）</li>
+                        <li><span class="highlight-inline">最高承伤（打盾）</span>：获胜方 <span class="highlight-inline">+2</span>，失败 <span class="highlight-inline">+1</span>（两方分别计算，数值一样并列加分）</li>
+                        <li><span class="highlight-inline">最高助攻（混助攻）</span>：获胜方 <span class="highlight-inline">+2</span>，失败 <span class="highlight-inline">+1</span>（两方分别计算，数值一样并列加分）</li>
+                    </ul>
+                </div>
+                <div class="rule-section">
+                    <h4 class="green-text">⭐ 额外奖励</h4>
+                    <ul>
+                        <li><span class="highlight-inline">五杀 +1</span>，若仅四人组队，则四杀 +1（单局仅计算一次）</li>
+                        <li><span class="highlight-inline">超神 +1</span>（击杀8人以上且死亡≤1次，单局仅计算一次）</li>
+                        <li>使用胜率榜倒数前10名的英雄获胜 <span class="highlight-inline">+4分</span></li>
+                    </ul>
+                </div>
+                <div class="rule-section">
+                    <h4 class="red-text">⚠ 减分机制</h4>
+                    <ul>
+                        <li>拿到本队最高击杀/最高经济，但未达本队伤害前2：赢 <span class="penalty-inline">-1分</span>，输 <span class="penalty-inline">-2分</span></li>
+                        <li>wegame结算中获得"推塔最多"图标：<span class="penalty-inline">-1分</span></li>
+                        <li>恶意消极游戏（挂机、退游戏、摆烂）：<span class="penalty-inline">-1分</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            // 粒子背景
+            const particlesContainer = document.getElementById('particlesContainer');
+            const particleColors = [
+                'rgba(200,169,81,0.7)',
+                'rgba(240,212,120,0.6)',
+                'rgba(91,156,245,0.55)',
+                'rgba(124,92,231,0.5)',
+                'rgba(45,212,191,0.55)',
+            ];
+            for (let i = 0; i < 45; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 3.5 + 1.2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.backgroundColor = particleColors[Math.floor(Math.random() * particleColors.length)];
+                particle.style.animationDuration = (Math.random() * 18 + 10) + 's';
+                particle.style.animationDelay = (Math.random() * 16) + 's';
+                particlesContainer.appendChild(particle);
+            }
+
+            // 数据定义（仅来自第二张表，共17人）
+            const detailData = [
+                { name: '胆小菇(丁真)', winBonus: 23, loseBonus: 13, fire: 51, shield: 10, assist: 10, extra: 22,
+                    penalty: 0, total: 93 },
+                { name: '小姐(朱赛)', winBonus: 14, loseBonus: 14, fire: 17, shield: 18, assist: 21, extra: 23,
+                    penalty: -3, total: 76 },
+                { name: '香农(张中伟)', winBonus: 14, loseBonus: 15, fire: 11, shield: 14, assist: 27, extra: 21,
+                    penalty: 0, total: 73 },
+                { name: '品如(兰海)', winBonus: 14, loseBonus: 14, fire: 18, shield: 16, assist: 16, extra: 18,
+                    penalty: -4, total: 64 },
+                { name: '智神(向智豪)', winBonus: 11, loseBonus: 18, fire: 3, shield: 29, assist: 24, extra: 4,
+                    penalty: -2, total: 58 },
+                { name: '一条柴(周延)', winBonus: 8, loseBonus: 14, fire: 5, shield: 20, assist: 20, extra: 6,
+                    penalty: -3, total: 48 },
+                { name: '劳动人民(卓恒)', winBonus: 14, loseBonus: 9, fire: 22, shield: 4, assist: 11, extra: 12,
+                    penalty: -2, total: 47 },
+                { name: '我的哥(周春江)', winBonus: 9, loseBonus: 12, fire: 12, shield: 4, assist: 16, extra: 1,
+                    penalty: -2, total: 31 },
+                { name: 'MING(周涛)', winBonus: 8, loseBonus: 5, fire: 16, shield: 8, assist: 0, extra: 7, penalty: 0,
+                    total: 31 },
+                { name: '大喷菇(吴成玮)', winBonus: 6, loseBonus: 15, fire: 3, shield: 24, assist: 6, extra: 0,
+                    penalty: -2, total: 31 },
+                { name: '小楼(李青林)', winBonus: 8, loseBonus: 7, fire: 8, shield: 9, assist: 8, extra: 5, penalty: -2,
+                    total: 28 },
+                { name: '宝批龙(周志文)', winBonus: 6, loseBonus: 2, fire: 1, shield: 4, assist: 11, extra: 9,
+                    penalty: -2, total: 23 },
+                { name: '摸鱼(李世文)', winBonus: 4, loseBonus: 4, fire: 2, shield: 7, assist: 8, extra: 0, penalty: 0,
+                    total: 17 },
+                { name: '彭于晏(罗陈瑞)', winBonus: 3, loseBonus: 4, fire: 5, shield: 4, assist: 2, extra: 2, penalty: 0,
+                    total: 13 },
+                { name: '亏欠(姚康熙)', winBonus: 5, loseBonus: 2, fire: 3, shield: 4, assist: 5, extra: 0, penalty: -4,
+                    total: 8 },
+                { name: '茶百道(邝从海)', winBonus: 1, loseBonus: 4, fire: 0, shield: 2, assist: 6, extra: 0, penalty: 0,
+                    total: 8 },
+                { name: '阎王(陈龙)', winBonus: 2, loseBonus: 2, fire: 3, shield: 0, assist: 3, extra: 0, penalty: -1,
+                    total: 5 },
+            ];
+
+            // 按总积分降序排列
+            const detailSorted = [...detailData].sort((a, b) => b.total - a.total);
+            const getShortName = (fullName) => fullName.split('(')[0];
+
+            // 填充积分排行榜表格
+            const rankingTableBody = document.getElementById('rankingTableBody');
+            detailSorted.forEach((d, idx) => {
+                const tr = document.createElement('tr');
+                const rank = idx + 1;
+                if (rank <= 3) tr.classList.add('top-row');
+                let rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' :
+                    'rank-other';
+                const penaltyHTML = d.penalty < 0 ?
+                    `<span class="tag-penalty">${d.penalty}</span>` :
+                    `<span style="color:#4a5568">0</span>`;
+                tr.innerHTML = `
+                    <td><span class="rank-badge ${rankClass}">${rank}</span></td>
+                    <td style="font-weight:600;color:#e2e8f0;">${d.name}</td>
+                    <td>${d.winBonus}</td>
+                    <td>${d.loseBonus}</td>
+                    <td style="color:#f87171;">${d.fire}</td>
+                    <td style="color:#60a5fa;">${d.shield}</td>
+                    <td style="color:#2dd4bf;">${d.assist}</td>
+                    <td style="color:#fbbf24;">${d.extra}</td>
+                    <td>${penaltyHTML}</td>
+                    <td class="stat-highlight" style="font-size:1.1rem;font-weight:800;">${d.total}</td>
+                `;
+                rankingTableBody.appendChild(tr);
+            });
+
+            // Chart.js 全局配置
+            Chart.defaults.color = '#a0b4cc';
+            Chart.defaults.font.family = "'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif";
+            Chart.defaults.font.size = 12;
+            Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(22,27,40,0.95)';
+            Chart.defaults.plugins.tooltip.borderColor = 'rgba(200,169,81,0.5)';
+            Chart.defaults.plugins.tooltip.borderWidth = 1;
+            Chart.defaults.plugins.tooltip.padding = 12;
+            Chart.defaults.plugins.tooltip.titleFont = { weight: 'bold', size: 13 };
+            Chart.defaults.plugins.tooltip.bodyFont = { size: 12 };
+
+            // 总积分柱状图（横向）
+            const ctxTotal = document.getElementById('chartTotalScore').getContext('2d');
+            const labelsTotal = detailSorted.map(d => getShortName(d.name));
+            const dataTotal = detailSorted.map(d => d.total);
+            const bgColorsTotal = detailSorted.map((_, i) => {
+                const colors = [
+                    'rgba(240,212,120,0.85)',
+                    'rgba(192,192,192,0.8)',
+                    'rgba(200,140,90,0.8)',
+                    'rgba(91,156,245,0.75)',
+                    'rgba(124,92,231,0.75)',
+                    'rgba(45,212,191,0.7)',
+                ];
+                return i < 6 ? colors[i] : 'rgba(120,140,170,0.6)';
+            });
+            const borderColorsTotal = bgColorsTotal.map(c => c.replace(/[\d.]+\)$/, '1)'));
+            new Chart(ctxTotal, {
+                type: 'bar',
+                data: {
+                    labels: labelsTotal,
+                    datasets: [{
+                        label: '总积分',
+                        data: dataTotal,
+                        backgroundColor: bgColorsTotal,
+                        borderColor: borderColorsTotal,
+                        borderWidth: 1.5,
+                        borderRadius: 6,
+                        borderSkipped: false,
+                    }],
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: '总积分', color: '#c8a951', font: { weight: 'bold',
+                                    size: 13 } },
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { font: { size: 11, weight: '600' }, color: '#c8c8c8' },
+                        },
+                    },
+                },
+            });
+
+            // 打火/打盾/助攻分组柱状图（TOP10）
+            const top10 = detailSorted.slice(0, 10);
+            const labelsTop10 = top10.map(d => getShortName(d.name));
+
+            new Chart(document.getElementById('chartGrouped').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labelsTop10,
+                    datasets: [
+                        { label: '打火得分', data: top10.map(d => d.fire),
+                            backgroundColor: 'rgba(248,113,113,0.7)', borderColor: 'rgba(248,113,113,1)',
+                            borderWidth: 1, borderRadius: 4 },
+                        { label: '打盾得分', data: top10.map(d => d.shield),
+                            backgroundColor: 'rgba(96,165,250,0.7)', borderColor: 'rgba(96,165,250,1)',
+                            borderWidth: 1, borderRadius: 4 },
+                        { label: '助攻得分', data: top10.map(d => d.assist),
+                            backgroundColor: 'rgba(45,212,191,0.7)', borderColor: 'rgba(45,212,191,1)',
+                            borderWidth: 1, borderRadius: 4 },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { usePointStyle: true, pointStyleWidth: 10, padding: 16, font: { size: 11 } },
+                        },
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 40,
+                                minRotation: 0 } },
+                        y: { title: { display: true, text: '得分', color: '#a0b4cc' },
+                            grid: { color: 'rgba(255,255,255,0.05)' } },
+                    },
+                },
+            });
+
+            // 胜局加分 vs 败局加分（TOP10）
+            new Chart(document.getElementById('chartWinLose').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labelsTop10,
+                    datasets: [
+                        { label: '胜局加分次数', data: top10.map(d => d.winBonus),
+                            backgroundColor: 'rgba(124,92,231,0.7)', borderColor: 'rgba(124,92,231,1)',
+                            borderWidth: 1, borderRadius: 4 },
+                        { label: '败局加分次数', data: top10.map(d => d.loseBonus),
+                            backgroundColor: 'rgba(148,163,184,0.7)', borderColor: 'rgba(148,163,184,1)',
+                            borderWidth: 1, borderRadius: 4 },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { usePointStyle: true, pointStyleWidth: 10, padding: 16, font: { size: 11 } },
+                        },
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 40,
+                                minRotation: 0 } },
+                        y: { title: { display: true, text: '次数', color: '#a0b4cc' },
+                            grid: { color: 'rgba(255,255,255,0.05)' } },
+                    },
+                },
+            });
+
+            // 额外奖励 vs 扣分（TOP10）
+            new Chart(document.getElementById('chartExtraPenalty').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labelsTop10,
+                    datasets: [
+                        { label: '额外奖励', data: top10.map(d => d.extra),
+                            backgroundColor: 'rgba(251,191,36,0.75)', borderColor: 'rgba(251,191,36,1)',
+                            borderWidth: 1, borderRadius: 4 },
+                        { label: '扣分', data: top10.map(d => d.penalty),
+                            backgroundColor: 'rgba(248,113,113,0.75)', borderColor: 'rgba(248,113,113,1)',
+                            borderWidth: 1, borderRadius: 4 },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { usePointStyle: true, pointStyleWidth: 10, padding: 16, font: { size: 11 } },
+                        },
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 40,
+                                minRotation: 0 } },
+                        y: {
+                            title: { display: true, text: '分值', color: '#a0b4cc' },
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+
+            // 雷达图：TOP7玩家六维对比（强化tooltip，显示原始值+标准化值）
+            const top7 = detailSorted.slice(0, 7);
+            const radarLabels = ['胜局加分', '败局加分', '打火得分', '打盾得分', '助攻得分', '额外奖励'];
+            const maxVals = {
+                winBonus: 23,
+                loseBonus: 18,
+                fire: 51,
+                shield: 29,
+                assist: 27,
+                extra: 23,
+            };
+            const radarColors = [
+                { bg: 'rgba(240,212,120,0.2)', border: 'rgba(240,212,120,0.9)' },
+                { bg: 'rgba(192,192,192,0.18)', border: 'rgba(192,192,192,0.85)' },
+                { bg: 'rgba(200,140,90,0.2)', border: 'rgba(200,140,90,0.85)' },
+                { bg: 'rgba(91,156,245,0.2)', border: 'rgba(91,156,245,0.85)' },
+                { bg: 'rgba(124,92,231,0.2)', border: 'rgba(124,92,231,0.85)' },
+                { bg: 'rgba(45,212,191,0.2)', border: 'rgba(45,212,191,0.85)' },
+                { bg: 'rgba(251,146,60,0.2)', border: 'rgba(251,146,60,0.85)' },
+            ];
+
+            const radarDatasets = top7.map((d, i) => {
+                const originalData = [
+                    d.winBonus,
+                    d.loseBonus,
+                    d.fire,
+                    d.shield,
+                    d.assist,
+                    d.extra
+                ];
+                const normalizedData = originalData.map((val, idx) => {
+                    const maxKey = Object.keys(maxVals)[idx];
+                    return Math.round((val / maxVals[maxKey]) * 100);
+                });
+                return {
+                    label: getShortName(d.name),
+                    data: normalizedData,
+                    originalData: originalData,
+                    backgroundColor: radarColors[i].bg,
+                    borderColor: radarColors[i].border,
+                    borderWidth: 2.5,
+                    pointBackgroundColor: radarColors[i].border,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 1.5,
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                    tension: 0.15,
+                };
+            });
+
+            new Chart(document.getElementById('chartRadar').getContext('2d'), {
+                type: 'radar',
+                data: { labels: radarLabels, datasets: radarDatasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { usePointStyle: true, pointStyleWidth: 12, padding: 20, font: { size: 12,
+                                    weight: '600' } },
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const dataset = ctx.dataset;
+                                    const index = ctx.dataIndex;
+                                    const raw = dataset.originalData ? dataset.originalData[index] : ctx.raw;
+                                    const normalized = ctx.raw;
+                                    const unit = index <= 1 ? '次' : '分';
+                                    return `${dataset.label}: ${raw}${unit} (标准化: ${normalized})`;
+                                },
+                            },
+                        },
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { stepSize: 20, backdropColor: 'transparent', font: { size: 10 },
+                                color: '#6b7d95' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            angleLines: { color: 'rgba(255,255,255,0.1)' },
+                            pointLabels: { font: { size: 12, weight: 'bold' }, color: '#c8c8c8' },
+                        },
+                    },
+                },
+            });
+
+            console.log('✅ 海克斯大乱斗积分统计系统 · 规则说明已精简');
+        })();
+    </script>
+</body>
+</html>
