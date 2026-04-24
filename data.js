@@ -1,5 +1,5 @@
-// 海克斯积分数据 - 自动生成于 2026/4/24 23:42:28
-const lastUpdateTime = '2026/4/24 23:42:28';
+// 海克斯积分数据 - 自动生成于 2026/4/24 23:48:11
+const lastUpdateTime = '2026/4/24 23:48:11';
 const detailData = [
     {
         "name": "胆小菇（丁真）",
@@ -15,12 +15,12 @@ const detailData = [
     {
         "name": "小姐（朱赛）",
         "winBonus": 14,
-        "loseBonus": 15,
-        "fire": 18,
+        "loseBonus": 16,
+        "fire": 19,
         "shield": 18,
         "assist": 22,
         "extra": 23,
-        "penalty": -3,
+        "penalty": -4,
         "total": 78
     },
     {
@@ -37,7 +37,7 @@ const detailData = [
     {
         "name": "品如（兰海）",
         "winBonus": 14,
-        "loseBonus": 15,
+        "loseBonus": 16,
         "fire": 18,
         "shield": 16,
         "assist": 16,
@@ -125,13 +125,13 @@ const detailData = [
     {
         "name": "宝批龙（周志文）",
         "winBonus": 6,
-        "loseBonus": 2,
+        "loseBonus": 3,
         "fire": 1,
-        "shield": 4,
-        "assist": 11,
+        "shield": 5,
+        "assist": 12,
         "extra": 9,
         "penalty": -2,
-        "total": 23
+        "total": 25
     },
     {
         "name": "摸鱼（李世文）",
@@ -156,6 +156,17 @@ const detailData = [
         "total": 13
     },
     {
+        "name": "茶百道（邝从海）",
+        "winBonus": 2,
+        "loseBonus": 4,
+        "fire": 0,
+        "shield": 2,
+        "assist": 8,
+        "extra": 0,
+        "penalty": -1,
+        "total": 9
+    },
+    {
         "name": "亏欠（姚康熙）",
         "winBonus": 5,
         "loseBonus": 2,
@@ -165,17 +176,6 @@ const detailData = [
         "extra": 0,
         "penalty": -4,
         "total": 8
-    },
-    {
-        "name": "茶百道（邝从海）",
-        "winBonus": 1,
-        "loseBonus": 4,
-        "fire": 0,
-        "shield": 2,
-        "assist": 6,
-        "extra": 0,
-        "penalty": -1,
-        "total": 7
     },
     {
         "name": "阎王（陈龙）",
