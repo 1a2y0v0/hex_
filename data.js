@@ -1,5 +1,5 @@
-// 海克斯积分数据 - 自动生成于 2026/4/26 18:14:23
-const lastUpdateTime = '2026/4/26 18:14:23';
+// 海克斯积分数据 - 自动生成于 2026/4/26 22:14:41
+const lastUpdateTime = '2026/4/26 22:14:41';
 const detailData = [
     {
         "name": "胆小菇（丁真）",
@@ -13,26 +13,26 @@ const detailData = [
         "total": 104
     },
     {
+        "name": "香农（张中伟）",
+        "winBonus": 17,
+        "loseBonus": 18,
+        "fire": 14,
+        "shield": 19,
+        "assist": 31,
+        "extra": 21,
+        "penalty": -1,
+        "total": 84
+    },
+    {
         "name": "小姐（朱赛）",
-        "winBonus": 14,
-        "loseBonus": 16,
-        "fire": 19,
+        "winBonus": 15,
+        "loseBonus": 17,
+        "fire": 22,
         "shield": 18,
         "assist": 22,
         "extra": 23,
         "penalty": -4,
-        "total": 78
-    },
-    {
-        "name": "香农（张中伟）",
-        "winBonus": 16,
-        "loseBonus": 16,
-        "fire": 13,
-        "shield": 16,
-        "assist": 28,
-        "extra": 21,
-        "penalty": 0,
-        "total": 78
+        "total": 81
     },
     {
         "name": "品如（兰海）",
@@ -48,24 +48,24 @@ const detailData = [
     {
         "name": "智神（向智豪）",
         "winBonus": 14,
-        "loseBonus": 18,
+        "loseBonus": 19,
         "fire": 5,
-        "shield": 31,
+        "shield": 32,
         "assist": 28,
         "extra": 4,
-        "penalty": -4,
+        "penalty": -5,
         "total": 64
     },
     {
         "name": "劳动人民(卓恒)",
-        "winBonus": 15,
+        "winBonus": 16,
         "loseBonus": 9,
-        "fire": 24,
+        "fire": 26,
         "shield": 5,
         "assist": 11,
         "extra": 13,
         "penalty": -2,
-        "total": 51
+        "total": 53
     },
     {
         "name": "一条柴（周延）",
@@ -101,37 +101,48 @@ const detailData = [
         "total": 37
     },
     {
-        "name": "小楼（李青林）",
+        "name": "摸鱼（李世文）",
         "winBonus": 9,
         "loseBonus": 8,
-        "fire": 8,
-        "shield": 11,
-        "assist": 11,
-        "extra": 5,
-        "penalty": -3,
-        "total": 32
-    },
-    {
-        "name": "摸鱼（李世文）",
-        "winBonus": 7,
-        "loseBonus": 8,
-        "fire": 3,
-        "shield": 15,
-        "assist": 15,
+        "fire": 5,
+        "shield": 17,
+        "assist": 17,
         "extra": 0,
-        "penalty": -1,
-        "total": 32
+        "penalty": -2,
+        "total": 37
     },
     {
         "name": "大喷菇（吴成玮）",
-        "winBonus": 6,
-        "loseBonus": 15,
+        "winBonus": 8,
+        "loseBonus": 16,
         "fire": 3,
-        "shield": 24,
-        "assist": 6,
+        "shield": 26,
+        "assist": 11,
         "extra": 0,
+        "penalty": -4,
+        "total": 36
+    },
+    {
+        "name": "小楼（李青林）",
+        "winBonus": 10,
+        "loseBonus": 8,
+        "fire": 8,
+        "shield": 13,
+        "assist": 11,
+        "extra": 6,
+        "penalty": -4,
+        "total": 34
+    },
+    {
+        "name": "彭于晏（罗陈瑞）",
+        "winBonus": 5,
+        "loseBonus": 9,
+        "fire": 13,
+        "shield": 8,
+        "assist": 3,
+        "extra": 3,
         "penalty": -2,
-        "total": 31
+        "total": 25
     },
     {
         "name": "宝批龙（周志文）",
@@ -145,37 +156,26 @@ const detailData = [
         "total": 25
     },
     {
-        "name": "彭于晏（罗陈瑞）",
-        "winBonus": 4,
-        "loseBonus": 7,
-        "fire": 10,
-        "shield": 6,
-        "assist": 2,
-        "extra": 3,
-        "penalty": -1,
-        "total": 20
-    },
-    {
         "name": "茶百道（邝从海）",
-        "winBonus": 2,
-        "loseBonus": 4,
-        "fire": 0,
+        "winBonus": 3,
+        "loseBonus": 5,
+        "fire": 2,
         "shield": 2,
-        "assist": 8,
+        "assist": 9,
         "extra": 0,
-        "penalty": -1,
-        "total": 9
+        "penalty": -2,
+        "total": 11
     },
     {
         "name": "亏欠（姚康熙）",
         "winBonus": 5,
-        "loseBonus": 2,
-        "fire": 3,
+        "loseBonus": 3,
+        "fire": 4,
         "shield": 4,
         "assist": 5,
         "extra": 0,
         "penalty": -4,
-        "total": 8
+        "total": 9
     },
     {
         "name": "阎王（陈龙）",
@@ -203,27 +203,27 @@ const diffData = [
         "isNew": false
     },
     {
+        "name": "香农（张中伟）",
+        "winBonus_diff": 3,
+        "loseBonus_diff": 3,
+        "fire_diff": 3,
+        "shield_diff": 5,
+        "assist_diff": 4,
+        "extra_diff": 0,
+        "penalty_diff": -1,
+        "total_diff": 11,
+        "isNew": false
+    },
+    {
         "name": "小姐（朱赛）",
-        "winBonus_diff": 0,
-        "loseBonus_diff": 0,
-        "fire_diff": 0,
+        "winBonus_diff": 1,
+        "loseBonus_diff": 1,
+        "fire_diff": 3,
         "shield_diff": 0,
         "assist_diff": 0,
         "extra_diff": 0,
         "penalty_diff": 0,
-        "total_diff": 0,
-        "isNew": false
-    },
-    {
-        "name": "香农（张中伟）",
-        "winBonus_diff": 2,
-        "loseBonus_diff": 1,
-        "fire_diff": 2,
-        "shield_diff": 2,
-        "assist_diff": 1,
-        "extra_diff": 0,
-        "penalty_diff": 0,
-        "total_diff": 5,
+        "total_diff": 3,
         "isNew": false
     },
     {
@@ -241,25 +241,25 @@ const diffData = [
     {
         "name": "智神（向智豪）",
         "winBonus_diff": 3,
-        "loseBonus_diff": 0,
+        "loseBonus_diff": 1,
         "fire_diff": 2,
-        "shield_diff": 2,
+        "shield_diff": 3,
         "assist_diff": 4,
         "extra_diff": 0,
-        "penalty_diff": -1,
+        "penalty_diff": -2,
         "total_diff": 7,
         "isNew": false
     },
     {
         "name": "劳动人民(卓恒)",
-        "winBonus_diff": 0,
+        "winBonus_diff": 1,
         "loseBonus_diff": 0,
-        "fire_diff": 0,
+        "fire_diff": 2,
         "shield_diff": 0,
         "assist_diff": 0,
         "extra_diff": 0,
         "penalty_diff": 0,
-        "total_diff": 0,
+        "total_diff": 2,
         "isNew": false
     },
     {
@@ -299,39 +299,51 @@ const diffData = [
         "isNew": false
     },
     {
-        "name": "小楼（李青林）",
-        "winBonus_diff": 1,
-        "loseBonus_diff": 1,
-        "fire_diff": 0,
-        "shield_diff": 2,
-        "assist_diff": 3,
-        "extra_diff": 0,
-        "penalty_diff": -1,
-        "total_diff": 4,
-        "isNew": false
-    },
-    {
         "name": "摸鱼（李世文）",
-        "winBonus_diff": 1,
+        "winBonus_diff": 3,
         "loseBonus_diff": 4,
-        "fire_diff": 1,
-        "shield_diff": 4,
-        "assist_diff": 5,
+        "fire_diff": 3,
+        "shield_diff": 6,
+        "assist_diff": 7,
         "extra_diff": 0,
-        "penalty_diff": -1,
-        "total_diff": 9,
+        "penalty_diff": -2,
+        "total_diff": 14,
         "isNew": false
     },
     {
         "name": "大喷菇（吴成玮）",
-        "winBonus_diff": 0,
-        "loseBonus_diff": 0,
+        "winBonus_diff": 2,
+        "loseBonus_diff": 1,
         "fire_diff": 0,
-        "shield_diff": 0,
-        "assist_diff": 0,
+        "shield_diff": 2,
+        "assist_diff": 5,
         "extra_diff": 0,
-        "penalty_diff": 0,
-        "total_diff": 0,
+        "penalty_diff": -2,
+        "total_diff": 5,
+        "isNew": false
+    },
+    {
+        "name": "小楼（李青林）",
+        "winBonus_diff": 2,
+        "loseBonus_diff": 1,
+        "fire_diff": 0,
+        "shield_diff": 4,
+        "assist_diff": 3,
+        "extra_diff": 1,
+        "penalty_diff": -2,
+        "total_diff": 6,
+        "isNew": false
+    },
+    {
+        "name": "彭于晏（罗陈瑞）",
+        "winBonus_diff": 2,
+        "loseBonus_diff": 5,
+        "fire_diff": 8,
+        "shield_diff": 4,
+        "assist_diff": 1,
+        "extra_diff": 1,
+        "penalty_diff": -2,
+        "total_diff": 12,
         "isNew": false
     },
     {
@@ -347,39 +359,27 @@ const diffData = [
         "isNew": false
     },
     {
-        "name": "彭于晏（罗陈瑞）",
-        "winBonus_diff": 1,
-        "loseBonus_diff": 3,
-        "fire_diff": 5,
-        "shield_diff": 2,
-        "assist_diff": 0,
-        "extra_diff": 1,
-        "penalty_diff": -1,
-        "total_diff": 7,
-        "isNew": false
-    },
-    {
         "name": "茶百道（邝从海）",
-        "winBonus_diff": 0,
-        "loseBonus_diff": 0,
-        "fire_diff": 0,
+        "winBonus_diff": 1,
+        "loseBonus_diff": 1,
+        "fire_diff": 2,
         "shield_diff": 0,
-        "assist_diff": 0,
+        "assist_diff": 1,
         "extra_diff": 0,
-        "penalty_diff": 0,
-        "total_diff": 0,
+        "penalty_diff": -1,
+        "total_diff": 2,
         "isNew": false
     },
     {
         "name": "亏欠（姚康熙）",
         "winBonus_diff": 0,
-        "loseBonus_diff": 0,
-        "fire_diff": 0,
+        "loseBonus_diff": 1,
+        "fire_diff": 1,
         "shield_diff": 0,
         "assist_diff": 0,
         "extra_diff": 0,
         "penalty_diff": 0,
-        "total_diff": 0,
+        "total_diff": 1,
         "isNew": false
     },
     {
