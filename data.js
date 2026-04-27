@@ -1,5 +1,5 @@
-// 海克斯积分数据 - 自动生成于 2026/4/27 22:49:08
-const lastUpdateTime = '2026/4/27 22:49:08';
+// 海克斯积分数据 - 自动生成于 2026/4/27 22:55:46
+const lastUpdateTime = '2026/4/27 22:55:46';
 const detailData = [
     {
         "name": "胆小菇（丁真）",
@@ -41,9 +41,9 @@ const detailData = [
         "fire": 23,
         "shield": 21,
         "assist": 20,
-        "extra": 21,
+        "extra": 22,
         "penalty": -5,
-        "total": 80
+        "total": 81
     },
     {
         "name": "智神（向智豪）",
@@ -244,9 +244,9 @@ const diffData = [
         "fire_diff": 5,
         "shield_diff": 2,
         "assist_diff": 2,
-        "extra_diff": 1,
+        "extra_diff": 2,
         "penalty_diff": -1,
-        "total_diff": 9,
+        "total_diff": 10,
         "isNew": false
     },
     {
@@ -256,9 +256,9 @@ const diffData = [
         "fire_diff": 0,
         "shield_diff": 0,
         "assist_diff": 0,
-        "extra_diff": 1,
+        "extra_diff": 0,
         "penalty_diff": 0,
-        "total_diff": 1,
+        "total_diff": 0,
         "isNew": false
     },
     {
@@ -415,6 +415,6 @@ const diffData = [
         "extra_diff": 0,
         "penalty_diff": -1,
         "total_diff": 4,
-        "isNew": true
+        "isNew": false
     }
 ];
